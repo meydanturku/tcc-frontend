@@ -4,15 +4,16 @@ import { getBooks, getAIInsights } from "/app/utils/api";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { InputText } from "primereact/inputtext";
 
 function Dashboard() {
     const [books, setBooks] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [insights, setInsights] = useState<{ [key: number]: string }>({});
     const [loadingAI, setLoadingAI] = useState<{ [key: number]: boolean }>({});
+    const [inputBookId, setInputBookId] = useState<string>("");
 
     useEffect(() => {
-        debugger
         getBooks()
             .then((data) => {
                 if (data && data.data) {
@@ -28,12 +29,18 @@ function Dashboard() {
             });
     }, []);
 
-    const handleAIInsights = async (bookId: number) => {
-        debugger
+    const handleAIInsights = async () => {
+        const bookId = parseInt(inputBookId);
+        if (isNaN(bookId)) {
+            alert("Please enter a valid book ID.");
+            return;
+        }
+
         setLoadingAI((prev) => ({ ...prev, [bookId]: true }));
+
         try {
-            const data = await getAIInsights(bookId);
-            setInsights((prev) => ({ ...prev, [bookId]: data?.data || "No insights available." }));
+            const message = await getAIInsights(bookId);  // ✅ API cevabı doğrudan mesaj içeriyor
+            setInsights((prev) => ({ ...prev, [bookId]: message || "No insights available." }));  // ✅ Doğrudan message kullan
         } catch (err) {
             console.error("Error fetching AI insights:", err);
             setInsights((prev) => ({ ...prev, [bookId]: "Error retrieving insights." }));
@@ -41,6 +48,7 @@ function Dashboard() {
             setLoadingAI((prev) => ({ ...prev, [bookId]: false }));
         }
     };
+
 
     return (
         <div className="grid">
@@ -62,24 +70,35 @@ function Dashboard() {
                                         <p><strong>ISBN:</strong> {book.isbn}</p>
                                         <p><strong>Published:</strong> {book.publicationYear}</p>
                                         <p>{book.description}</p>
-
-                                        <Button
-                                            label={loadingAI[book.id] ? "Loading..." : "Get AI Insights"}
-                                            className="mt-2"
-                                            icon="pi pi-lightbulb"
-                                            onClick={() => handleAIInsights(book.id)}
-                                            disabled={loadingAI[book.id]}
-                                        />
-
-                                        {insights[book.id] && (
-                                            <div className="mt-3 p-2 border rounded bg-gray-100">
-                                                <h6>💡 AI Insights:</h6>
-                                                <p>{insights[book.id]}</p>
-                                            </div>
-                                        )}
                                     </Card>
                                 </div>
                             ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="card mt-4">
+                    <h5>💡 Get AI Insights for a Book</h5>
+                    <div className="flex align-items-center gap-2">
+                        <InputText
+                            value={inputBookId}
+                            onChange={(e) => setInputBookId(e.target.value)}
+                            placeholder="Enter Book ID"
+                            className="w-2"
+                        />
+                        <Button
+                            label="Get AI Insights"
+                            icon="pi pi-lightbulb"
+                            className="p-button-primary"
+                            onClick={handleAIInsights}
+                            disabled={loadingAI[parseInt(inputBookId)]}
+                        />
+                    </div>
+
+                    {insights[parseInt(inputBookId)] && (
+                        <div className="mt-3 p-2 border rounded bg-gray-100">
+                            <h6>💡 AI Insights:</h6>
+                            <p>{insights[parseInt(inputBookId)]}</p>
                         </div>
                     )}
                 </div>

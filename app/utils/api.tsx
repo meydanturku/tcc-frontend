@@ -73,9 +73,10 @@ export const deleteBook = async (id: number): Promise<any> => {
 };
 
 export const getAIInsights = async (id: number): Promise<any> => {
+    debugger
     try {
         const response = await axios.get(`${API_BASE_URL}/${id}/ai-insights`);
-        return response.data;
+        return response.data.message;
     } catch (error) {
         console.error("AI Insights API Error:", error);
         return null;
