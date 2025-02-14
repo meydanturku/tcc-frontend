@@ -1,24 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# 📚 Book Library Frontend
 
-First, run the development server:
+This is the **Next.js** frontend for the Book Library application.  
+It interacts with the **Spring Boot backend** to display books and AI insights.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🚀 Installation & Setup
+### 1️⃣ Clone the Repository
+```sh
+git clone https://github.com/YOUR_USERNAME/book-frontend.git
+cd book-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install Dependencies
+```sh
+npm install
+```
 
-## Learn More
+### 3️⃣ Run the Frontend
+```sh
+npm run dev
+```
+The frontend will be available at:  
+**📍 `http://localhost:3000`**
 
-To learn more about Next.js, take a look at the following resources:
+---
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📌 Features
+- 📖 View all books
+- 🔍 Search for books by title or author
+- 📄 View book details
+- 💡 Get AI-generated insights for a book
+
+---
+
+Currently, there is a bug where clicking "Back to Library" results in an error. If requested, this issue will be addressed and fixed accordingly.
